@@ -125,7 +125,7 @@
           </svg>
           Solicitações de Verba
         </h3>
-        <button class="bg-primary hover:bg-blue-700 text-white font-bold py-2.5 px-5 rounded-lg shadow-md transition-all flex items-center text-sm">
+        <button onclick="openModal()" class="bg-primary hover:bg-blue-700 text-white font-bold py-2.5 px-5 rounded-lg shadow-md transition-all flex items-center text-sm cursor-pointer">
           + Nova Campanha
         </button>
       </div>
@@ -143,7 +143,7 @@
               <th class="px-4 py-3 text-center text-xs font-bold uppercase">Ações</th>
             </tr>
           </thead>
-          <tbody class="bg-white divide-y divide-gray-200 text-sm">
+          <tbody id="campaignTableBody" class="bg-white divide-y divide-gray-200 text-sm">
             <tr>
               <td class="px-4 py-4 font-bold text-gray-900">[META] AD002</td>
               <td class="px-4 py-4 text-gray-600">Leads / Conversas</td>
@@ -211,6 +211,82 @@
     </section>
 
   </div>
+
+  <!-- MODAL PARA ADICIONAR NOVA CAMPANHA -->
+  <div id="campaignModal" class="modal">
+    <div class="modal-content">
+      <div class="bg-gradient-to-r from-primary to-secondary text-white p-5 rounded-t-xl flex items-center justify-between">
+        <h3 class="text-xl font-bold">Adicionar Nova Campanha</h3>
+        <button onclick="closeModal()" class="text-white hover:text-gray-200 text-xl font-bold cursor-pointer">&times;</button>
+      </div>
+      <form id="campaignForm" onsubmit="handleAddCampaign(event)" class="p-6 space-y-4">
+        <div>
+          <label class="block text-sm font-bold text-gray-700 mb-1">Nome da Campanha</label>
+          <input type="text" id="inputName" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary" placeholder="Ex: [META] AD003">
+        </div>
+        <div>
+          <label class="block text-sm font-bold text-gray-700 mb-1">Objetivo</label>
+          <input type="text" id="inputObjective" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary" placeholder="Ex: Leads / Conversas">
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-bold text-gray-700 mb-1">Verba Atual (US$)</label>
+            <input type="text" id="inputCurrent" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary" placeholder="0,00">
+          </div>
+          <div>
+            <label class="block text-sm font-bold text-gray-700 mb-1">Verba Solicitada (US$)</label>
+            <input type="text" id="inputRequested" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary" placeholder="0,00">
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-bold text-gray-700 mb-1">Justificativa</label>
+          <textarea id="inputJustification" required rows="2" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary" placeholder="Motivo da solicitação..."></textarea>
+        </div>
+        <div class="flex justify-end space-x-3 pt-3">
+          <button type="button" onclick="closeModal()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-bold hover:bg-gray-300 cursor-pointer">Cancelar</button>
+          <button type="submit" class="px-5 py-2 bg-primary text-white rounded-lg font-bold hover:bg-blue-700 cursor-pointer">Salvar Campanha</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- SCRIPT DE INTERAÇÃO -->
+  <script>
+    function openModal() {
+      document.getElementById('campaignModal').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('campaignModal').classList.remove('active');
+    }
+
+    function handleAddCampaign(event) {
+      event.preventDefault();
+      
+      const name = document.getElementById('inputName').value;
+      const objective = document.getElementById('inputObjective').value;
+      const current = document.getElementById('inputCurrent').value;
+      const requested = document.getElementById('inputRequested').value;
+      const justification = document.getElementById('inputJustification').value;
+
+      const tbody = document.getElementById('campaignTableBody');
+      const newRow = document.createElement('tr');
+      
+      newRow.innerHTML = `
+        <td class="px-4 py-4 font-bold text-gray-900">${name}</td>
+        <td class="px-4 py-4 text-gray-600">${objective}</td>
+        <td class="px-4 py-4 text-center">US$ ${current}</td>
+        <td class="px-4 py-4 text-center font-bold text-primary">US$ ${requested}</td>
+        <td class="px-4 py-4 text-gray-600">${justification}</td>
+        <td class="px-4 py-4 text-center"><span class="status-badge status-pending">Pendente</span></td>
+        <td class="px-4 py-4 text-center text-gray-400">—</td>
+      `;
+
+      tbody.appendChild(newRow);
+      document.getElementById('campaignForm').reset();
+      closeModal();
+    }
+  </script>
 
 </body>
 </html>
