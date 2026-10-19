@@ -1,45 +1,216 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Dashboard Executivo: Impacto AcadÃªmico</title>
-<style>
-:root{--primary:#0B7BC4;--accent:#0FB5D6;--ink:#10202E;--muted:#5A6B7A;}
-*{box-sizing:border-box}body{margin:0;padding:48px 20px;font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:var(--ink);background:#f6f9fb;line-height:1.65}
-main{max-width:820px;margin:0 auto;background:#fff;border-radius:16px;padding:48px;box-shadow:0 10px 40px rgba(16,32,46,.08)}
-h1{color:var(--primary);font-size:2rem;margin:0 0 .25rem}h2{color:var(--primary);margin-top:2rem}h3,h4{color:var(--ink)}
-.sub{color:var(--muted);margin:0 0 2rem}
-blockquote{border-left:4px solid var(--accent);margin:1rem 0;padding:.25rem 1rem;color:var(--muted)}
-aside{border-left:4px solid var(--accent);margin:1rem 0;padding:.75rem 1rem;background:#eef7fb}aside p{margin:.25rem 0 0}a{color:var(--primary)}
-table{width:100%;border-collapse:collapse;margin:1.25rem 0}th,td{border:1px solid #dbe6ee;padding:.6rem .75rem;text-align:left;font-size:.95rem}
-th{background:#e3f1fa;color:var(--ink)}hr{border:0;border-top:1px solid #dbe6ee;margin:2rem 0}
-</style></head><body><main><h1>Dashboard Executivo: Impacto AcadÃªmico</h1><p>&lt;!DOCTYPE html&gt; &lt;html lang="pt-BR"&gt; &lt;head&gt; &lt;meta charset="UTF-8"&gt; &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt; &lt;title&gt;Painel de AprovaÃ§Ã£o de Verba &amp; Performance â€” Impacto AcadÃªmico&lt;/title&gt; &lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt; &lt;script&gt; tailwind.config = { theme: { extend: { colors: { primary: '#1e40af', secondary: '#3b82f6', success: '#10b981', danger: '#ef4444', warning: '#f59e0b', pending: '#fbbf24', dark: '#1f2937', light: '#f3f4f6' } } } } &lt;/script&gt; &lt;style&gt; @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap');</p>
-<p>body { font-family: 'Inter', sans-serif; }</p>
-<p>.card-hover { transition: all 0.3s ease; }</p>
-<p>.card-hover:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15); }</p>
-<p>.status-badge { display: inline-flex; align-items: center; padding: 0.5rem 1rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }</p>
-<p>.status-approved { background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); color: #065f46; border: 2px solid #10b981; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3); }</p>
-<p>.status-pending { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); color: #92400e; border: 2px solid #fbbf24; box-shadow: 0 2px 8px rgba(251, 191, 36, 0.3); }</p>
-<p>.status-rejected { background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); color: #991b1b; border: 2px solid #ef4444; box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3); }</p>
-<p>.btn-approve { background: linear-gradient(135deg, #10b981 0%, #059669 100%); transition: all 0.2s; }</p>
-<p>.btn-approve:hover { background: linear-gradient(135deg, #059669 0%, #047857 100%); transform: scale(1.05); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4); }</p>
-<p>.btn-reject { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); transition: all 0.2s; }</p>
-<p>.btn-reject:hover { background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); transform: scale(1.05); box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4); }</p>
-<p>.btn-pending { background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); transition: all 0.2s; }</p>
-<p>.btn-pending:hover { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); transform: scale(1.05); box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4); }</p>
-<p>.signature-box { border: 2px dashed #3b82f6; background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); padding: 1.25rem; border-radius: 0.75rem; margin-top: 0.75rem; display: none; }</p>
-<p>.signature-box.active { display: block; animation: fadeIn 0.4s ease; }</p>
-<p>@keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }</p>
-<p>.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); }</p>
-<p>.modal.active { display: flex; align-items: center; justify-content: center; animation: fadeIn 0.3s ease; }</p>
-<p>.modal-content { background-color: white; margin: auto; padding: 0; border-radius: 1rem; width: 90%; max-width: 600px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); animation: slideUp 0.3s ease; }</p>
-<p>@keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }</p>
-<p>@media print { .no-print { display: none; } } &lt;/style&gt; &lt;/head&gt; &lt;body class="bg-gradient-to-br from-gray-50 via-blue-50 to-gray-100 min-h-screen"&gt;</p>
-<p>&lt;!-- Container Principal --&gt; &lt;div class="max-w-7xl mx-auto p-4 md:p-6 lg:p-8 space-y-8"&gt;</p>
-<p>&lt;!-- 1. CABEÃ‡ALHO EXECUTIVO --&gt; &lt;header class="bg-gradient-to-r from-primary via-blue-700 to-secondary text-white rounded-2xl shadow-2xl p-6 md:p-8"&gt; &lt;div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6"&gt; &lt;div class="flex-1"&gt; &lt;div class="flex items-center mb-3"&gt; &lt;svg class="w-12 h-12 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"&gt; &lt;path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /&gt; &lt;/svg&gt; &lt;div&gt; &lt;h1 class="text-3xl md:text-4xl font-bold"&gt;Painel de AprovaÃ§Ã£o de Verba &amp; Performance&lt;/h1&gt; &lt;h2 class="text-xl md:text-2xl font-light opacity-90 mt-1"&gt;Impacto AcadÃªmico&lt;/h2&gt; &lt;/div&gt; &lt;/div&gt; &lt;p class="text-sm opacity-75 flex items-center flex-wrap gap-2"&gt; &lt;svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"&gt; &lt;path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /&gt; &lt;/svg&gt; &lt;span&gt;Equipe Infographya (GestÃ£o de MÃ­dia &amp; Performance) | PatrÃ­cia &amp; Daniela (Impacto AcadÃªmico)&lt;/span&gt; &lt;/p&gt; &lt;/div&gt; &lt;div class="bg-white/20 backdrop-blur-md rounded-xl p-5 border-2 border-white/30 shadow-lg"&gt; &lt;p class="text-xs font-semibold uppercase tracking-wide mb-2 opacity-90 flex items-center"&gt; &lt;svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"&gt; &lt;path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /&gt; &lt;/svg&gt; PerÃ­odo de AnÃ¡lise &lt;/p&gt; &lt;p class="text-lg font-bold text-center mb-1"&gt;01/10/2026 a 16/10/2026&lt;/p&gt; &lt;p class="text-xs opacity-75 text-center"&gt;Atualizado: &lt;span id="lastUpdate"&gt;&lt;/span&gt;&lt;/p&gt; &lt;/div&gt; &lt;/div&gt; &lt;/header&gt;</p>
-<p>&lt;!-- CARDS DE ORÃ‡AMENTO --&gt; &lt;section class="grid grid-cols-1 md:grid-cols-3 gap-6"&gt; &lt;!-- OrÃ§amento Total --&gt; &lt;div class="card-hover bg-white rounded-2xl shadow-lg p-6 border-l-4 border-primary relative overflow-hidden"&gt; &lt;div class="absolute top-0 right-0 w-32 h-32 bg-primary opacity-5 rounded-full -mr-16 -mt-16"&gt;&lt;/div&gt; &lt;div class="relative z-10"&gt; &lt;div class="flex items-center justify-between mb-4"&gt; &lt;h3 class="text-sm font-bold text-gray-600 uppercase tracking-wide"&gt;OrÃ§amento Mensal&lt;/h3&gt; &lt;svg class="w-10 h-10 text-primary opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24"&gt; &lt;path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /&gt; &lt;/svg&gt; &lt;/div&gt; &lt;p class="text-4xl md:text-5xl font-extrabold text-primary mb-2" id="totalBudgetDisplay"&gt;US$ 600,00&lt;/p&gt; &lt;p class="text-xs text-gray-500 flex items-center"&gt; &lt;svg class="w-4 h-4 mr-1 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"&gt; &lt;path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /&gt; &lt;/svg&gt; Teto mensal aprovado &lt;/p&gt; &lt;/div&gt; &lt;/div&gt;</p>
-<p>&lt;!-- Verba Comprometida --&gt; &lt;div class="card-hover bg-white rounded-2xl shadow-lg p-6 border-l-4 border-warning relative overflow-hidden"&gt; &lt;div class="absolute top-0 right-0 w-32 h-32 bg-warning opacity-5 rounded-full -mr-16 -mt-16"&gt;&lt;/div&gt; &lt;div class="relative z-10"&gt; &lt;div class="flex items-center justify-between mb-4"&gt; &lt;h3 class="text-sm font-bold text-gray-600 uppercase tracking-wide"&gt;Verba Comprometida&lt;/h3&gt; &lt;svg class="w-10 h-10 text-warning opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24"&gt; &lt;path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /&gt; &lt;/svg&gt; &lt;/div&gt; &lt;p class="text-4xl md:text-5xl font-extrabold text-warning mb-2"&gt;US$ &lt;span id="committedBudget"&gt;680,50&lt;/span&gt;&lt;/p&gt; &lt;div class="flex items-center justify-between text-xs text-gray-500 mt-3"&gt; &lt;span&gt;Campanhas ativas/aprovadas&lt;/span&gt; &lt;span class="font-bold text-warning"&gt;&lt;span id="committedPercent"&gt;113&lt;/span&gt;% do teto&lt;/span&gt; &lt;/div&gt; &lt;div class="w-full bg-gray-200 rounded-full h-2 mt-2"&gt; &lt;div id="committedBar" class="bg-warning h-2 rounded-full transition-all duration-500" style="width: 100%"&gt;&lt;/div&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt;</p>
-<p>&lt;!-- Saldo DisponÃ­vel --&gt; &lt;div class="card-hover bg-white rounded-2xl shadow-lg p-6 border-l-4 border-success relative overflow-hidden"&gt; &lt;div class="absolute top-0 right-0 w-32 h-32 bg-success opacity-5 rounded-full -mr-16 -mt-16"&gt;&lt;/div&gt; &lt;div class="relative z-10"&gt; &lt;div class="flex items-center justify-between mb-4"&gt; &lt;h3 class="text-sm font-bold text-gray-600 uppercase tracking-wide"&gt;Saldo DisponÃ­vel&lt;/h3&gt; &lt;svg class="w-10 h-10 text-success opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24"&gt; &lt;path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /&gt; &lt;/svg&gt; &lt;/div&gt; &lt;p class="text-4xl md:text-5xl font-extrabold mb-2" id="availableBudgetColor"&gt; &lt;span id="availableSign"&gt;&lt;/span&gt;US$ &lt;span id="availableBudget"&gt;80,50&lt;/span&gt; &lt;/p&gt; &lt;p class="text-xs text-gray-500 flex items-center"&gt; &lt;svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"&gt; &lt;path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /&gt; &lt;/svg&gt; &lt;span id="availableMessage"&gt;Verba excedida&lt;/span&gt; &lt;/p&gt; &lt;/div&gt; &lt;/div&gt; &lt;/section&gt;</p>
-<p>&lt;!-- TABELA DE CAMPANHAS --&gt; &lt;section class="bg-white rounded-2xl shadow-lg p-6 md:p-8"&gt; &lt;div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6"&gt; &lt;h3 class="text-2xl md:text-3xl font-bold text-dark flex items-center mb-4 md:mb-0"&gt; &lt;svg class="w-8 h-8 mr-3 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"&gt; &lt;path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /&gt; &lt;/svg&gt; SolicitaÃ§Ãµes de Verba &lt;/h3&gt; &lt;button onclick="openModal()" class="no-print bg-gradient-to-r from-primary to-secondary hover:from-blue-700 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all transform hover:scale-105 flex items-center"&gt; &lt;svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"&gt; &lt;path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /&gt; &lt;/svg&gt; Nova Campanha &lt;/button&gt; &lt;/div&gt;</p>
-<p>&lt;div class="overflow-x-auto -mx-6 md:mx-0"&gt; &lt;div class="inline-block min-w-full align-middle"&gt; &lt;div class="overflow-hidden border border-gray-200 md:rounded-xl"&gt; &lt;table class="min-w-full divide-y divide-gray-200"&gt; &lt;thead&gt; &lt;tr class="bg-gradient-to-r from-primary to-secondary text-white"&gt; &lt;th class="px-4 py-4 text-left text-xs font-bold uppercase tracking-wider"&gt;Campanha&lt;/th&gt; &lt;th class="px-4 py-4 text-left text-xs font-bold uppercase tracking-wider"&gt;Objetivo&lt;/th&gt; &lt;th class="px-4 py-4 text-center text-xs font-bold uppercase tracking-wider"&gt;Verba Atual&lt;/th&gt; &lt;th class="px-4 py-4 text-center text-xs font-bold uppercase tracking-wider"&gt;Verba Solicitada&lt;/th&gt; &lt;th class="px-4 py-4 text-left text-xs font-bold uppercase tracking-wider"&gt;Justificativa&lt;/th&gt; &lt;th class="px-4 py-4 text-center text-xs font-bold uppercase tracking-wider"&gt;Status&lt;/th&gt; &lt;th class="px-4 py-4 text-center text-xs font-bold uppercase tracking-wider no-print"&gt;AÃ§Ãµes&lt;/th&gt; &lt;/tr&gt; &lt;/thead&gt; &lt;tbody class="bg-white divide-y divide-gray-200" id="campaignTableBody"&gt; &lt;!-- As campanhas serÃ£o inseridas aqui via JavaScript --&gt; &lt;/tbody&gt; &lt;/table&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt; &lt;/section&gt;</p>
-<p>&lt;!-- PAINEL SEMANAL DE ACOMPANHAMENTO --&gt; &lt;section class="bg-white rounded-2xl shadow-lg p-6 md:p-8"&gt; &lt;h3 class="text-2xl md:text-3xl font-bold text-dark mb-6 flex items-center"&gt; &lt;svg class="w-8 h-8 mr-3 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"&gt; &lt;path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /&gt; &lt;/svg&gt; Resultados do PerÃ­odo (01/10 a 16/10) &lt;/h3&gt;</p>
-<p>&lt;div class="overflow-x-auto -mx-6 md:mx-0"&gt; &lt;div class="inline-block min-w-full align-middle"&gt; &lt;div class="overflow-hidden border border-gray-200 md:rounded-xl"&gt; &lt;table class="min-w-full divide-y divide-gray-200"&gt; &lt;thead&gt; &lt;tr class="bg-gradient-to-r from-secondary to-blue-400 text-white"&gt; &lt;th class="px-4 py-4 text-left text-xs font-bold uppercase tracking-wider"&gt;Campanha&lt;/th&gt; &lt;th class="px-4 py-4 text-center text-xs font-bold uppercase tracking-wider"&gt;Investimento&lt;/th&gt; &lt;th class="px-4 py-4 text-center text-xs font-bold uppercase tracking-wider"&gt;ImpressÃµes&lt;/th&gt; &lt;th class="px-4 py-4 text-center text-xs font-bold uppercase tracking-wider"&gt;Alcance&lt;/th&gt; &lt;th class="px-4 py-4 text-center text-xs font-bold uppercase tracking-wider"&gt;Conversas/Leads&lt;/th&gt; &lt;th class="px-4 py-4 text-center text-xs font-bold uppercase tracking-wider"&gt;CPA MÃ©dio&lt;/th&gt; &lt;/tr&gt; &lt;/thead&gt; &lt;tbody class="bg-white divide-y divide-gray-200"&gt; &lt;tr class="hover:bg-blue-50 transition-colors"&gt; &lt;td class="px-4 py-4"&gt; &lt;div class="flex items-center"&gt; &lt;div class="flex-shrink-0 w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-3"&gt; &lt;svg class="w-6 h-6 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24"&gt; &lt;path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /&gt; &lt;/svg&gt; &lt;/div&gt; &lt;div&gt; &lt;p class="text-sm font-bold text-gray-900"&gt;[META] AD002&lt;/p&gt; &lt;p class="text-xs text-gray-500"&gt;MÃ£es brasileiras nos EUA&lt;/p&gt; &lt;/div&gt; &lt;/div&gt; &lt;/td&gt; &lt;td class="px-4 py-4 text-center"&gt; &lt;p class="text-sm font-bold text-gray-900"&gt;US$ 438,25&lt;/p&gt; &lt;/td&gt; &lt;td class="px-4 py-4 text-center"&gt; &lt;p class="text-sm font-semibold text-gray-700"&gt;60.476&lt;/p&gt; &lt;/td&gt; &lt;td class="px-4 py-4 text-center"&gt; &lt;p class="text-sm font-semibold text-gray-700"&gt;84.766&lt;/p&gt; &lt;/td&gt; &lt;td class="px-4 py-4 text-center"&gt; &lt;span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-800"&gt; Conversas Qualificadas &lt;/span&gt; &lt;/td&gt; &lt;td class="px-4 py-4 text-center"&gt; &lt;p class="text-sm font-bold text-success"&gt;US$ 32,87&lt;/p&gt; &lt;/td&gt; &lt;/tr&gt; &lt;tr class="hover:bg-blue-50 transition-colors"&gt; &lt;td class="px-4 py-4"&gt; &lt;div class="flex items-center"&gt; &lt;div class="flex-shrink-0 w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center mr-3"&gt; &lt;svg class="w-6 h-6 text-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24"&gt; &lt;path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /&gt; &lt;/svg&gt; &lt;/div&gt; &lt;div&gt; &lt;p class="text-sm font-bold text-gray-900"&gt;[META] Novos Criativos&lt;/p&gt; &lt;p class="text-xs text-gray-500"&gt;Middle / 9Âº Ano / Gifted&lt;/p&gt; &lt;/div&gt; &lt;/div&gt; &lt;/td&gt; &lt;td class="px-4 py-4 text-center"&gt; &lt;p class="text-sm font-bold text-gray-900"&gt;US$ 242,25&lt;/p&gt; &lt;/td&gt; &lt;td class="px-4 py-4 text-center"&gt; &lt;p class="text-sm font-semibold text-gray-700"&gt;38.864&lt;/p&gt; &lt;/td&gt; &lt;td class="px-4 py-4 text-center"&gt; &lt;p class="text-sm font-semibold text-gray-700"&gt;54.209&lt;/p&gt; &lt;/td&gt; &lt;td class="px-4 py-4 text-center"&gt; &lt;span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-800"&gt; Em MaturaÃ§Ã£o &lt;/span&gt; &lt;/td&gt; &lt;td class="px-4 py-4 text-center"&gt; &lt;p class="text-sm font-bold text-gray-600"&gt;US$ 33-44&lt;/p&gt; &lt;/td&gt; &lt;/tr&gt; &lt;/tbody&gt; &lt;/table&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt; &lt;/section&gt; &lt;/div&gt;</p>
-<p>&lt;!-- MODAL PARA ADICIONAR NOVA CAMPANHA --&gt; &lt;div id="campaignModal" class="modal"&gt; &lt;div class="modal-content"&gt; &lt;div class="bg-gradient-to-r from-primary to-secondary text-white p-6 rounded-t-xl"&gt; &lt;div class="flex items-center justify-between"&gt; &lt;h2 class="text-2xl font-bold flex items-center"&gt; &lt;svg class="w-7 h-7 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"&gt; &lt;path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /&gt; &lt;/svg&gt; Adicionar Nova Campanha &lt;/h2&gt; &lt;button onclick="closeModal()" class="text-white hover:text-gray-200 transition-colors"&gt; &lt;svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"&gt; &lt;path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /&gt; &lt;/svg&gt; &lt;/button&gt; &lt;/div&gt; &lt;/div&gt; &lt;form id="newCampaignForm" class="p-6 space-y-5"&gt; &lt;div&gt; &lt;label class="block text-sm font-bold text-gray-700 mb-2"&gt;Nome da Campanha &lt;/label&gt; &lt;input type="text" id="campaignName" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="Ex: [META] AD003 - Teste High School"&gt; &lt;/div&gt; &lt;div&gt; &lt;label class="block text-sm font-bold text-gray-700 mb-2"&gt;Objetivo &lt;/label&gt;</p></main></body></html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel de Aprovação de Verba & Performance — Impacto Acadêmico</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#1e40af',
+            secondary: '#3b82f6',
+            success: '#10b981',
+            danger: '#ef4444',
+            warning: '#f59e0b',
+            pending: '#fbbf24',
+            dark: '#1f2937',
+            light: '#f3f4f6'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    .card-hover { transition: all 0.3s ease; }
+    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15); }
+    .status-badge { display: inline-flex; align-items: center; padding: 0.5rem 1rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .status-approved { background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); color: #065f46; border: 2px solid #10b981; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3); }
+    .status-pending { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); color: #92400e; border: 2px solid #fbbf24; box-shadow: 0 2px 8px rgba(251, 191, 36, 0.3); }
+    .status-rejected { background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); color: #991b1b; border: 2px solid #ef4444; box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3); }
+    .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); }
+    .modal.active { display: flex; align-items: center; justify-content: center; }
+    .modal-content { background-color: white; margin: auto; border-radius: 1rem; width: 90%; max-width: 600px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-gray-50 via-blue-50 to-gray-100 min-h-screen">
+
+  <div class="max-w-7xl mx-auto p-4 md:p-6 lg:p-8 space-y-8">
+
+    <!-- 1. CABEÇALHO EXECUTIVO -->
+    <header class="bg-gradient-to-r from-primary via-blue-700 to-secondary text-white rounded-2xl shadow-2xl p-6 md:p-8">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+        <div class="flex-1">
+          <div class="flex items-center mb-3">
+            <svg class="w-12 h-12 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <div>
+              <h1 class="text-3xl md:text-4xl font-bold">Painel de Aprovação de Verba & Performance</h1>
+              <h2 class="text-xl md:text-2xl font-light opacity-90 mt-1">Impacto Acadêmico</h2>
+            </div>
+          </div>
+          <p class="text-sm opacity-75 flex items-center flex-wrap gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+            <span>Equipe Infographya (Gestão de Mídia & Performance) | Patrícia & Daniela (Impacto Acadêmico)</span>
+          </p>
+        </div>
+        <div class="bg-white/20 backdrop-blur-md rounded-xl p-5 border-2 border-white/30 shadow-lg">
+          <p class="text-xs font-semibold uppercase tracking-wide mb-2 opacity-90 flex items-center">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            PERÍODO DE ANÁLISE
+          </p>
+          <p class="text-lg font-bold text-center mb-1">01/10/2026 a 16/10/2026</p>
+          <p class="text-xs opacity-75 text-center">Atualizado recentemente</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- 2. CARDS DE ORÇAMENTO -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="card-hover bg-white rounded-2xl shadow-lg p-6 border-l-4 border-primary relative overflow-hidden">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-sm font-bold text-gray-600 uppercase tracking-wide">Orçamento Mensal</h3>
+          <svg class="w-8 h-8 text-primary opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <p class="text-4xl font-extrabold text-primary mb-2">US$ 600,00</p>
+        <p class="text-xs text-gray-500">Teto mensal aprovado</p>
+      </div>
+
+      <div class="card-hover bg-white rounded-2xl shadow-lg p-6 border-l-4 border-warning relative overflow-hidden">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-sm font-bold text-gray-600 uppercase tracking-wide">Verba Comprometida</h3>
+          <svg class="w-8 h-8 text-warning opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+          </svg>
+        </div>
+        <p class="text-4xl font-extrabold text-warning mb-2">US$ 680,50</p>
+        <div class="flex items-center justify-between text-xs text-gray-500 mt-3">
+          <span>Campanhas ativas/aprovadas</span>
+          <span class="font-bold text-warning">113% do teto</span>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
+          <div class="bg-warning h-2 rounded-full" style="width: 100%"></div>
+        </div>
+      </div>
+
+      <div class="card-hover bg-white rounded-2xl shadow-lg p-6 border-l-4 border-success relative overflow-hidden">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-sm font-bold text-gray-600 uppercase tracking-wide">Saldo Disponível</h3>
+          <svg class="w-8 h-8 text-success opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4" />
+          </svg>
+        </div>
+        <p class="text-4xl font-extrabold text-gray-900 mb-2">US$ 80,50</p>
+        <p class="text-xs text-gray-500">Verba excedida</p>
+      </div>
+    </section>
+
+    <!-- 3. SOLICITAÇÕES DE VERBA -->
+    <section class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+        <h3 class="text-2xl font-bold text-dark flex items-center">
+          <svg class="w-7 h-7 mr-3 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+          </svg>
+          Solicitações de Verba
+        </h3>
+        <button class="bg-primary hover:bg-blue-700 text-white font-bold py-2.5 px-5 rounded-lg shadow-md transition-all flex items-center text-sm">
+          + Nova Campanha
+        </button>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead>
+            <tr class="bg-gradient-to-r from-primary to-secondary text-white">
+              <th class="px-4 py-3 text-left text-xs font-bold uppercase">Campanha</th>
+              <th class="px-4 py-3 text-left text-xs font-bold uppercase">Objetivo</th>
+              <th class="px-4 py-3 text-center text-xs font-bold uppercase">Verba Atual</th>
+              <th class="px-4 py-3 text-center text-xs font-bold uppercase">Verba Solicitada</th>
+              <th class="px-4 py-3 text-left text-xs font-bold uppercase">Justificativa</th>
+              <th class="px-4 py-3 text-center text-xs font-bold uppercase">Status</th>
+              <th class="px-4 py-3 text-center text-xs font-bold uppercase">Ações</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200 text-sm">
+            <tr>
+              <td class="px-4 py-4 font-bold text-gray-900">[META] AD002</td>
+              <td class="px-4 py-4 text-gray-600">Leads / Conversas</td>
+              <td class="px-4 py-4 text-center">US$ 438,25</td>
+              <td class="px-4 py-4 text-center font-bold text-primary">US$ 438,25</td>
+              <td class="px-4 py-4 text-gray-600">Manutenção do fluxo principal</td>
+              <td class="px-4 py-4 text-center"><span class="status-badge status-approved">Aprovado</span></td>
+              <td class="px-4 py-4 text-center text-gray-400">—</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-4 font-bold text-gray-900">[META] Novos Criativos</td>
+              <td class="px-4 py-4 text-gray-600">Maturação / Testes</td>
+              <td class="px-4 py-4 text-center">US$ 242,25</td>
+              <td class="px-4 py-4 text-center font-bold text-primary">US$ 242,25</td>
+              <td class="px-4 py-4 text-gray-600">Escala de novos públicos</td>
+              <td class="px-4 py-4 text-center"><span class="status-badge status-pending">Pendente</span></td>
+              <td class="px-4 py-4 text-center text-gray-400">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 4. RESULTADOS DO PERÍODO -->
+    <section class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+      <h3 class="text-2xl font-bold text-dark mb-6 flex items-center">
+        <svg class="w-7 h-7 mr-3 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+        Resultados do Período (01/10 a 16/10)
+      </h3>
+
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead>
+            <tr class="bg-gradient-to-r from-secondary to-blue-400 text-white">
+              <th class="px-4 py-3 text-left text-xs font-bold uppercase">Campanha</th>
+              <th class="px-4 py-3 text-center text-xs font-bold uppercase">Investimento</th>
+              <th class="px-4 py-3 text-center text-xs font-bold uppercase">Impressões</th>
+              <th class="px-4 py-3 text-center text-xs font-bold uppercase">Alcance</th>
+              <th class="px-4 py-3 text-center text-xs font-bold uppercase">Conversas/Leads</th>
+              <th class="px-4 py-3 text-center text-xs font-bold uppercase">CPA Médio</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200 text-sm">
+            <tr>
+              <td class="px-4 py-4 font-bold text-gray-900">[META] AD002 <span class="block text-xs font-normal text-gray-500">Mães brasileiras nos EUA</span></td>
+              <td class="px-4 py-4 text-center font-bold">US$ 438,25</td>
+              <td class="px-4 py-4 text-center">60.476</td>
+              <td class="px-4 py-4 text-center">84.766</td>
+              <td class="px-4 py-4 text-center"><span class="px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-800">Conversas Qualificadas</span></td>
+              <td class="px-4 py-4 text-center font-bold text-success">US$ 32,87</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-4 font-bold text-gray-900">[META] Novos Criativos <span class="block text-xs font-normal text-gray-500">Middle / 9º Ano / Gifted</span></td>
+              <td class="px-4 py-4 text-center font-bold">US$ 242,25</td>
+              <td class="px-4 py-4 text-center">38.864</td>
+              <td class="px-4 py-4 text-center">54.209</td>
+              <td class="px-4 py-4 text-center"><span class="px-3 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-800">Em Maturação</span></td>
+              <td class="px-4 py-4 text-center font-bold text-gray-600">US$ 33-44</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+
+</body>
+</html>
